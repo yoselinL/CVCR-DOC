@@ -18,7 +18,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/cadenaCooperativasResponse"
-  
+
   /api/cooperativa/verificar-codigo:
     post:
       tags:
@@ -35,8 +35,8 @@ paths:
           content:
             application/json:
               schema:
-                  $ref: "#/components/schemas/cadenaCooperativaCodigoResponse"
-        
+                $ref: "#/components/schemas/cadenaCooperativaCodigoResponse"
+
   /api/cuenta/autenticar:
     post:
       tags:
@@ -122,7 +122,7 @@ paths:
       responses:
         200:
           description: Success
-  
+
   /api/cuenta/status-token:
     post:
       tags:
@@ -140,7 +140,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/cadenaStatustokenResponse"
-                
+
   /api/departamento:
     get:
       tags:
@@ -174,6 +174,78 @@ paths:
               schema:
                 $ref: "#/components/schemas/cadenaMunicipiosResponse"
 
+  /api/direccion:
+    get:
+      tags:
+        - direccion
+      summary: Obtener todas las direcciones asociadas al usuario autenticado
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/cadenaDireccionResponse"
+    post:
+      tags:
+        - direccion
+      summary: Agregar una nueva dirección
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/cadenaDireccionCreateRequest"
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/cadenaDireccionCreateResponse"
+
+  /api/direccion/{id}:
+    delete:
+      tags:
+        - direccion
+      summary: Eliminar una dirección
+      parameters:
+        - in: path
+          name: Id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/cadenaDireccionDeleteResponse"
+    patch:
+      tags:
+        - direccion
+      summary: Actualizar una dirección
+      parameters:
+        - in: path
+          name: Id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/cadenaDireccionActualizarRequest"
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/cadenaDireccionActualizarResponse"
+
 components:
   schemas:
     cadenaCooperativasResponse:
@@ -184,22 +256,16 @@ components:
         mensaje:
           type: string
         data:
-          type: array
-          items:
-            $ref: "#/components/schemas/listaCooperativas"
-          nullable: true
+          type: object
+          properties:
+            codigo:
+              type: string
+            nombre:
+              type: string
       additionalProperties: false
-    
-    listaCooperativas:
-      type: object
-      properties:
-        codigo:
-          type: string
-        nombre:
-          type: string
 
     cadenaCooperativaCodigoRequest:
-      type:  object
+      type: object
       required:
         - codigo
         - codigoCooperativa
@@ -218,14 +284,12 @@ components:
         mensaje:
           type: string
         data:
-          type: array
-          items:
-            type: object
-            properties:
-              verificado:
-                type: boolean
-              mensaje:
-                type: string
+          type: object
+          properties:
+            verificado:
+              type: boolean
+            mensaje:
+              type: string
       additionalProperties: false
 
     cadenaAutenticarRequest:
@@ -238,8 +302,6 @@ components:
           type: string
         password:
           type: string
-        password2:
-          type: string          
       additionalProperties: false
 
     cadenaAutenticarResponse:
@@ -250,22 +312,20 @@ components:
         mensaje:
           type: string
         data:
-          type: array
-          items:
-            type: object
-            properties:
-              id:
-                type: string
-              usuario:
-                type: string
-              correo:
-                type: string
-              isVerified:
-                type: boolean
-              jwToken:
-                type: string
-              refreshToken:
-                type: string
+          type: object
+          properties:
+            id:
+              type: string
+            usuario:
+              type: string
+            correo:
+              type: string
+            isVerified:
+              type: boolean
+            jwToken:
+              type: string
+            refreshToken:
+              type: string
       additionalProperties: false
 
     cadenaRegistroRequest:
@@ -326,7 +386,7 @@ components:
           type: string
         data:
           type: string
-      additionalProperties: false         
+      additionalProperties: false
 
     cadenaReiniciarpasswordRequest:
       type: object
@@ -342,7 +402,7 @@ components:
         confirmPassword:
           type: string
       additionalProperties: false
-    
+
     cadenaReiniciarpasswordResponse:
       type: object
       properties:
@@ -383,22 +443,20 @@ components:
         mensaje:
           type: string
         data:
-          type: array
-          items:
-            type: object
-            properties:
-              id:
-                type: string
-              usuario:
-                type: string
-              correo:
-                type: string
-              isVerified:
-                type: boolean
-              jwToken:
-                type: string
-              refreshToken:
-                type: string
+          type: object
+          properties:
+            id:
+              type: string
+            usuario:
+              type: string
+            correo:
+              type: string
+            isVerified:
+              type: boolean
+            jwToken:
+              type: string
+            refreshToken:
+              type: string
       additionalProperties: false
 
     cadenaDepartamentoResponse:
@@ -440,3 +498,150 @@ components:
               codigo_departamento:
                 type: number
       additionalProperties: false
+
+    cadenaDireccionResponse:
+      type: object
+      properties:
+        resultado:
+          type: boolean
+        mensaje:
+          type: string
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              codigoDireccion:
+                type: string
+              direccion:
+                type: string
+              alias:
+                type: string
+              colonia:
+                type: string
+              numeroCasa:
+                type: string
+              indicaciones:
+                type: string
+              zona:
+                type: string
+              municipio:
+                type: number
+              departamento:
+                type: number
+      additionalProperties: false
+
+    cadenaDireccionCreateRequest:
+      type: object
+      properties:
+        direccion:
+          type: string
+        alias:
+          type: string
+        colonia:
+          type: string
+        numeroCasa:
+          type: string
+        indicaciones:
+          type: string
+        zona:
+          type: string
+        municipio:
+          type: number
+        departamento:
+          type: number
+      additionalProperties: false
+
+    cadenaDireccionCreateResponse:
+      type: object
+      properties:
+        resultado:
+          type: boolean
+        mensaje:
+          type: string
+        data:
+          type: object
+          properties:
+            codigoDireccion:
+              type: string
+            direccion:
+              type: string
+            alias:
+              type: string
+            colonia:
+              type: string
+            numeroCasa:
+              type: string
+            indicaciones:
+              type: string
+            zona:
+              type: string
+            municipio:
+              type: number
+            departamento:
+              type: number
+      additionalProperties: false
+
+    cadenaDireccionDeleteResponse:
+      type: object
+      properties:
+        resultado:
+          type: boolean
+        mensaje:
+          type: string
+        data:
+         type: number
+      additionalProperties: false
+
+    cadenaDireccionActualizarRequest:
+      type: object
+      properties:
+        id:
+          type: string
+        direccion:
+          type: string
+        alias:
+          type: string
+        colonia:
+          type: string
+        numeroCasa:
+          type: string
+        indicaciones:
+          type: string
+        zona:
+          type: string
+        municipio:
+          type: number
+        departamento:
+          type: number
+      additionalProperties: false
+
+    cadenaDireccionActualizarResponse:
+      type: object
+      properties:
+        resultado:
+          type: boolean
+        mensaje:
+          type: string
+        data:
+          type: object
+          properties:
+            codigoDireccion:
+              type: string
+            direccion:
+              type: string
+            alias:
+              type: string
+            colonia:
+              type: string
+            numeroCasa:
+              type: string
+            indicaciones:
+              type: string
+            zona:
+              type: string
+            municipio:
+              type: number
+            departamento:
+              type: number
+      additionalProperties: false      
