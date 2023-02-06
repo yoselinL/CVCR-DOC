@@ -145,7 +145,7 @@ paths:
     get:
       tags:
         - departamento
-      summary: Obtener todo el catálogo de departamentos
+      summary: Obtener todo el listado de departamentos
       responses:
         200:
           description: Success
@@ -157,8 +157,8 @@ paths:
   /api/departamento/{departamentoId}/municipios:
     get:
       tags:
-        - departamento
-      summary: Obtener municipios de un departamento
+        - municipio
+      summary: Obtener listado de municipios de un departamento
       parameters:
         - in: path
           name: departamentoId
@@ -173,6 +173,26 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/cadenaMunicipiosResponse"
+
+  /api/municipio/{id}/zonas:
+    get:
+      tags:
+        - zona
+      summary: Obtener listado de las zonas pertenecientes a un municipio
+      parameters:
+        - in: path
+          name: Id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/cadenaZonasmunicipioResponse"
 
   /api/direccion:
     get:
@@ -245,6 +265,79 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/cadenaDireccionActualizarResponse"
+        
+  /api/nit:
+    get:
+      tags:
+        - nit
+      summary: Obtener el listado de todos los NITs asociados al usuario autenticado
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/cadenaNitlistadoResponse"
+    post:
+      tags:
+        - nit
+      summary: Agregar un nuevo NIT
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/cadenaNitCreateRequest"
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/cadenaNitCreateResponse"
+
+  /api/nit/{id}:
+    delete:
+      tags:
+        - nit
+      summary: Eliminar un NIT del usuario autenticado
+      parameters:
+        - in: path
+          name: Id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/cadenaNitDeleteResponse"
+    patch:
+      tags:
+        - nit
+      summary: Modificar un NIT
+      parameters:
+        - in: path
+          name: Id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/cadenaNitActualizarRequest"
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/cadenaNitActualizarResponse"
+                  
 
 components:
   schemas:
@@ -499,6 +592,26 @@ components:
                 type: number
       additionalProperties: false
 
+    cadenaZonasmunicipioResponse:
+      type: object
+      properties:
+        resultado:
+          type: boolean
+        mensaje:
+          type: string
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              nombre:
+                type: string
+              codigo_municipio:
+                type: number
+      additionalProperties: false      
+
     cadenaDireccionResponse:
       type: object
       properties:
@@ -524,7 +637,7 @@ components:
               indicaciones:
                 type: string
               zona:
-                type: string
+                type: number
               municipio:
                 type: number
               departamento:
@@ -545,7 +658,7 @@ components:
         indicaciones:
           type: string
         zona:
-          type: string
+          type: number
         municipio:
           type: number
         departamento:
@@ -575,7 +688,7 @@ components:
             indicaciones:
               type: string
             zona:
-              type: string
+              type: number
             municipio:
               type: number
             departamento:
@@ -609,7 +722,7 @@ components:
         indicaciones:
           type: string
         zona:
-          type: string
+          type: number
         municipio:
           type: number
         departamento:
@@ -639,9 +752,114 @@ components:
             indicaciones:
               type: string
             zona:
-              type: string
+              type: number
             municipio:
               type: number
             departamento:
               type: number
-      additionalProperties: false      
+      additionalProperties: false
+
+    cadenaNitlistadoResponse:
+      type: object
+      properties:
+        resultado:
+          type: boolean
+        mensaje:
+          type: string
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              codigoNit:
+                type: string
+              nombre:
+                type: string
+              razon:
+                type: string
+              nit:
+                type: string
+              direccion:
+                type: string
+      additionalProperties: false
+
+    cadenaNitCreateRequest:
+      type: object
+      properties:
+        nombre:
+          type: string
+        razon:
+          type: string
+        nit:
+          type: string
+        direccion:
+          type: string
+      additionalProperties: false
+       
+    cadenaNitCreateResponse:
+      type: object
+      properties:
+        resultado:
+          type: boolean
+        mensaje:
+          type: string
+        data:
+          type: object
+          properties:
+            codigoNit:
+              type: string
+            nombre:
+              type: string
+            razon:
+              type: string
+            nit:
+              type: string
+            direccion:
+              type: string
+      additionalProperties: false
+
+    cadenaNitDeleteResponse:
+      type: object
+      properties:
+        resultado:
+          type: boolean
+        mensaje:
+          type: string
+        data:
+          type: number
+      additionalProperties: false
+
+    cadenaNitActualizarRequest:
+      type: object
+      properties:
+        id:
+          type: string
+        nombre:
+          type: string
+        razon:
+          type: string
+        direccion:
+          type: string
+      additionalProperties: false
+
+    cadenaNitActualizarResponse:
+      type: object
+      properties:
+        resultado:
+          type: boolean
+        mensaje:
+          type: string
+        data:
+          type: object
+          properties:
+            codigoNit:
+              type: string
+            nombre:
+              type: string
+            razon:
+              type: string
+            nit:
+              type: string
+            direccion:
+              type: string
+      additionalProperties: false     
