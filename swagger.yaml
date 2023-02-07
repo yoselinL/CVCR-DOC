@@ -536,6 +536,162 @@ paths:
               schema:
                 $ref: "#/components/schemas/cadenaPerfilactualizarResponse"
 
+  /api/producto/domicilio:
+    get:
+      tags:
+        - producto
+      summary: Búsqueda de productos para envío a domicilio
+      parameters:
+        - in: query
+          name: codigoDireccion
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: nombreProducto
+          schema:
+            type: string
+        - in: query
+          name: sku
+          schema:
+            type: string
+        - in: query
+          name: numeroPagina
+          schema:
+            type: number
+        - in: query
+          name: tamanoPagina
+          schema:
+            type: number
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/cadenaProductodomicilioResponse"
+
+  /api/producto/favoritos:
+    get:
+      tags:
+        - producto
+      summary: Obtener productos favoritos por listado de código de productos
+      parameters:
+        - in: query
+          name: ListaSKU
+          required: true
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/cadenaProductofavoritosQueryparam"
+        - in: query
+          name: codigoFarmacia
+          schema:
+            type: string
+        - in: query
+          name: codigoDireccion
+          schema:
+            type: string
+        - in: query
+          name: tiempoLlegada
+          schema:
+            type: number
+        - in: query
+          name: numeroPagina
+          schema:
+            type: number
+        - in: query
+          name: tamanoPagina
+          schema:
+            type: number
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/cadenaProductofavoritosResponse"
+
+  /api/producto/historial:
+    get:
+      tags:
+        - producto
+      summary: Obtener historial de productos
+      parameters:
+        - in: query
+          name: fechaInicial
+          schema:
+            type: string
+            format: date-time
+        - in: query
+          name: fechaFinal
+          schema:
+            type: string
+            format: date-time
+        - in: query
+          name: numeroPagina
+          schema:
+            type: number
+        - in: query
+          name: tamanoPagina
+          schema:
+            type: number
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/cadenaProductohistorialResponse"
+            
+  /api/productos-favoritos:
+    get:
+      tags:
+        - producto favorito
+      summary: Obtener los productos favoritos seleccionados por el usuario
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/cadenaProductosfavoritosResponse"
+    post:
+      tags:
+        - producto favorito
+      summary: Agregar un nuevo producto favorito
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/cadenaProductosfavoritosCreateRequest"
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/cadenaProductosfavoritosCreateResponse"
+
+  /api/productos-favoritos/{id}:
+    delete:
+      tags:
+        - producto favorito
+      summary: Eliminar un producto favorito por el código de producto
+      parameters:
+        - in: path
+          name: Id
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/cadenaProductosfavoritosDeleteResponse"
+
 components:
   schemas:
     cadenaCooperativasResponse:
@@ -1479,4 +1635,221 @@ components:
               type: string
             foto:
               type: string              
-      additionalProperties: false   
+      additionalProperties: false
+
+    cadenaProductodomicilioResponse:
+      type: object
+      properties:
+        resultado:
+          type: boolean
+        mensaje:
+          type: string
+        data:
+          type: object
+          properties:
+            numeroPagina:
+              type: number
+            tamanoPagina:
+              type: number
+            primeraPagina:
+              type: string
+            ultimaPagina:
+              type: string
+            totalPaginas:
+              type: number
+            totalRegistros:
+              type: number
+            siguientePagina:
+              type: string
+            anteriorPagina:
+              type: string
+            productos:
+              type: array
+              items:
+                type: object
+                properties:
+                  codigoProducto:
+                    type: string
+                  sku:
+                    type: string
+                  nombre:
+                    type: string
+                  descripcion:
+                    type: string
+                  precio:
+                    type: number
+                  precioVenta:
+                    type: number
+                  disponible:
+                    type: boolean
+                  anillo:
+                    type: number
+                  necesitaReceta:
+                    type: boolean
+                  codigoHub:
+                    type: string
+                  codigoFarmacia:
+                    type: string
+                  cantidadInventario:
+                    type: number
+                  notificar_dias:
+                    type: number
+                  es_recurrente:
+                    type: boolean
+                  promocion:
+                    type: string
+                  tiempoMinutos:
+                    type: number
+      additionalProperties: false
+                  
+    cadenaProductofavoritosQueryparam:
+      type: object
+      properties:
+        sku:
+          type: string
+        cantidad:
+          type: number
+      additionalProperties: false
+
+    cadenaProductofavoritosResponse:
+      type: object
+      properties:
+        resultado:
+          type: boolean
+        mensaje:
+          type: string
+        data:
+          type: object
+          properties:
+            totalRegistros:
+              type: number
+            productos:
+              type: array
+              items:
+                type: object
+                properties:
+                  codigoProducto:
+                    type: string
+                  sku:
+                    type: string
+                  nombre:
+                    type: string
+                  descripcion:
+                    type: string
+                  precio:
+                    type: number
+                  precioVenta:
+                    type: number
+                  disponible:
+                    type: boolean
+                  anillo:
+                    type: number
+                  necesitaReceta:
+                    type: boolean
+                  codigoHub:
+                    type: string
+                  codigoFarmacia:
+                    type: string
+                  cantidadInventario:
+                    type: number
+                  notificar_dias:
+                    type: number
+                  es_recurrente:
+                    type: boolean
+                  promocion:
+                    type: string
+                  tiempoMinutos:
+                    type: number
+      additionalProperties: false
+
+    cadenaProductohistorialResponse:
+      type: object
+      properties:
+        resultado:
+          type: boolean
+        mensaje:
+          type: string
+        data:
+          type: object
+          properties:
+            numeroPagina:
+              type: number
+            tamanoPagina:
+              type: number
+            totalPaginas:
+              type: number
+            totalRegistros:
+              type: number
+            productos:
+              type: array
+              items:
+                type: object
+                properties:
+                  codigoProducto:
+                    type: string
+                  nombreProducto:
+                    type: string
+                  cantidad:
+                    type: number
+                  precioVenta:
+                    type: number
+                  fecha:
+                    type: string
+                    format: date-time
+      additionalProperties: false 
+
+    cadenaProductosfavoritosResponse:
+      type: object
+      properties:
+        resultado:
+          type: boolean
+        mensaje:
+          type: string
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              codigoProducto:
+                type: string
+              nombre:
+                type: string
+              descripcion:
+                type: string
+      additionalProperties: false
+
+    cadenaProductosfavoritosCreateRequest:
+      required:
+       - codigoProducto
+      type: object
+      properties:
+        codigoProducto:
+          type: string
+      additionalProperties: false
+
+    cadenaProductosfavoritosCreateResponse:
+      type: object
+      properties:
+        resultado:
+          type: boolean
+        mensaje:
+          type: string
+        data:
+          type: object
+          properties:
+            codigoFavorito:
+              type: string
+      additionalProperties: false
+
+    cadenaProductosfavoritosDeleteResponse:
+      type: object
+      properties:
+        resultado:
+          type: boolean
+        mensaje:
+          type: string
+        data:
+          type: string
+      additionalProperties: false      
