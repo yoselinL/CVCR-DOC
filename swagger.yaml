@@ -888,7 +888,7 @@ components:
         codigo:
           type: string
         idEmpresa:
-          type: number
+          type: string
       additionalProperties: false
 
     cadenaEmpresaCodigoResponse:
@@ -932,18 +932,14 @@ components:
         data:
           type: object
           properties:
-            id:
-              type: string
-            usuario:
-              type: string
-            correo:
+            idusuario:
               type: string
             isVerified:
               type: boolean
             idPais:
               type: string
             idEmpresa:
-              type: number
+              type: string
             jwToken:
               type: string
             refreshToken:
@@ -973,7 +969,7 @@ components:
         fechaNacimiento:
           type: string
         idEmpresa:
-          type: number
+          type: string
         password:
           type: string
         confirmarPassword:
@@ -2214,5 +2210,5 @@ components:
             idEmpresas:
               type: array
               items:
-                type: number
-      additionalProperties: false     
+                type: string
+      additionalProperties: false
