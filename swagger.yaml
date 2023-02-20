@@ -912,11 +912,14 @@ components:
       required:
         - email
         - password
+        - pais
       properties:
         email:
           type: string
         password:
           type: string
+        idPais:
+          type: number          
       additionalProperties: false
 
     cadenaAutenticarResponse:
