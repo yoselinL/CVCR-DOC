@@ -1,41 +1,55 @@
 openapi: 3.0.1
 info:
-  title: API
-  description: Diseño de apis para aplicacion movil
-  version: v1
+  title: API FARMAPAGOS
+  description: Diseño de apis para aplicacion movil FarmaPagos
+  version: v2
 
 paths:
-  /api/cooperativa/lista-cooperativa:
+  /api/pais/paises:
     get:
       tags:
-        - cooperativa
-      summary: Lista de cooperativas disponibles
-      description: Devuelve el listado de todas las cooperativas disponibles
+        - pais
+      summary: Lista de paises disponibles
+      description: Devuelve el listado de todos los paises disponibles
       responses:
         200:
           description: Success
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/cadenaCooperativasResponse"
+                $ref: "#/components/schemas/cadenaPaisesResponse"
 
-  /api/cooperativa/verificar-codigo:
+  /api/empresa/empresas:
+    get:
+      tags:
+        - empresa
+      summary: Lista de empresas disponibles
+      description: Devuelve el listado de todas las empresas disponibles
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/cadenaEmpresaResponse"
+
+  /api/empresa/verificar:
     post:
       tags:
-        - cooperativa
-      summary: Verifica código de cooperativa
+        - empresa
+      summary: Verifica código de empresa
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/cadenaCooperativaCodigoRequest"
+              $ref: "#/components/schemas/cadenaEmpresaCodigoRequest"
       responses:
         200:
           description: Success
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/cadenaCooperativaCodigoResponse"
+                $ref: "#/components/schemas/cadenaEmpresaCodigoResponse"
 
   /api/cuenta/autenticar:
     post:
@@ -122,6 +136,10 @@ paths:
       responses:
         200:
           description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/cadenaCambiarpasswordResponse"          
 
   /api/cuenta/status-token:
     post:
@@ -548,6 +566,10 @@ paths:
             type: string
             format: uuid
         - in: query
+          name: idPais
+          schema:
+            type: string            
+        - in: query
           name: nombreProducto
           schema:
             type: string
@@ -592,6 +614,10 @@ paths:
           name: codigoDireccion
           schema:
             type: string
+        - in: query
+          name: idPais
+          schema:
+            type: string            
         - in: query
           name: tiempoLlegada
           schema:
@@ -770,9 +796,51 @@ paths:
               schema:
                 $ref: "#/components/schemas/cadenaTiempoapoyoResponse"
 
+  /api/salud-empresa:
+    get:
+      tags:
+        - salud empresa
+      summary: Obtener información de salud y empresa por medio del documento de identificación, pais y pin
+      parameters:
+        - in: path
+          name: dpi
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: idPais
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: pin
+          required: true
+          schema:
+            type: number
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/cadenasaludEmpresaResponse"
+
+  /api/salud-empresa/flags:
+    get:
+      tags:
+        - salud empresa
+      summary: Obtener flags de salud y empresa para identificar cuando activar la opción en app móvil
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/cadenasaludEmpresaFlagsResponse"
+
 components:
   schemas:
-    cadenaCooperativasResponse:
+    cadenaPaisesResponse:
       type: object
       properties:
         resultado:
@@ -780,27 +848,50 @@ components:
         mensaje:
           type: string
         data:
-          type: object
-          properties:
-            codigo:
-              type: string
-            nombre:
-              type: string
+          type: array
+          items:
+            type: object
+            properties:
+              codigo:
+                type: string
+              nombre:
+                type: string
+              icono:
+                type: string
+
       additionalProperties: false
 
-    cadenaCooperativaCodigoRequest:
+    cadenaEmpresaResponse:
+      type: object
+      properties:
+        resultado:
+          type: boolean
+        mensaje:
+          type: string
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              codigo:
+                type: string
+              nombre:
+                type: string
+      additionalProperties: false
+
+    cadenaEmpresaCodigoRequest:
       type: object
       required:
         - codigo
-        - codigoCooperativa
+        - idEmpresa
       properties:
         codigo:
           type: string
-        codigoCooperativa:
+        idEmpresa:
           type: number
       additionalProperties: false
 
-    cadenaCooperativaCodigoResponse:
+    cadenaEmpresaCodigoResponse:
       type: object
       properties:
         resultado:
@@ -846,6 +937,8 @@ components:
               type: string
             isVerified:
               type: boolean
+            idPais:
+              type: number
             jwToken:
               type: string
             refreshToken:
@@ -859,9 +952,10 @@ components:
         - apellido
         - correo
         - fechaNacimiento
-        - cooperativa
+        - idEmpresa
         - password
         - confirmarPassword
+        - idPais
       properties:
         nombre:
           type: string
@@ -873,12 +967,14 @@ components:
           type: string
         fechaNacimiento:
           type: string
-        cooperativa:
+        idEmpresa:
           type: number
         password:
           type: string
         confirmarPassword:
           type: string
+        idPais:
+          type: number
       additionalProperties: false
 
     cadenaRegistroResponse:
@@ -950,6 +1046,17 @@ components:
         token:
           type: string
 
+    cadenaCambiarpasswordResponse:
+      type: object
+      properties:
+        resultado:
+          type: boolean
+        mensaje:
+          type: string
+        data:
+          type: string
+      additionalProperties: false      
+
     cadenaStatustokenRequest:
       type: object
       properties:
@@ -977,6 +1084,8 @@ components:
               type: string
             isVerified:
               type: boolean
+            idPais:
+              type: number              
             jwToken:
               type: string
             refreshToken:
@@ -1017,7 +1126,7 @@ components:
                 type: string
               nombre:
                 type: string
-              codigo_departamento:
+              idDepartamento:
                 type: number
       additionalProperties: false
 
@@ -1037,7 +1146,7 @@ components:
                 type: string
               nombre:
                 type: string
-              codigo_municipio:
+              idMunicipio:
                 type: number
       additionalProperties: false      
 
@@ -1053,7 +1162,7 @@ components:
           items:
             type: object
             properties:
-              codigoDireccion:
+              id:
                 type: string
               direccion:
                 type: string
@@ -1110,7 +1219,7 @@ components:
         data:
           type: object
           properties:
-            codigoDireccion:
+            id:
               type: string
             direccion:
               type: string
@@ -1325,6 +1434,8 @@ components:
           properties:
             id:
               type: string
+            idPais:
+              type: number
             ordenPrincipal:
               type: string
             codigoOrden:
@@ -1754,6 +1865,8 @@ components:
                     type: string
                   descripcion:
                     type: string
+                  moneda:
+                    type: string
                   precio:
                     type: number
                   precioVenta:
@@ -1772,8 +1885,6 @@ components:
                     type: number
                   notificar_dias:
                     type: number
-                  es_recurrente:
-                    type: boolean
                   promocion:
                     type: string
                   tiempoMinutos:
@@ -1813,6 +1924,8 @@ components:
                   nombre:
                     type: string
                   descripcion:
+                    type: string
+                  moneda:
                     type: string
                   precio:
                     type: number
@@ -1869,6 +1982,8 @@ components:
                     type: string
                   cantidad:
                     type: number
+                  moneda:
+                    type: string
                   precioVenta:
                     type: number
                   fecha:
@@ -2056,3 +2171,45 @@ components:
               tiempoEntrega:
                 type: number
       additionalProperties: false 
+
+    cadenasaludEmpresaResponse:
+      type: object
+      properties:
+        resultado:
+          type: boolean
+        mensaje:
+          type: string
+        data:
+          type: object
+          properties:
+            empresa:
+              type: string
+            fecha_nacimiento:
+              type: string
+            nombre_afiliado:
+              type: string
+            nit:
+              type: string
+            moneda:
+              type: string
+            monto_disponible:
+              type: number
+            aplica_descuento:
+              type: boolean
+      additionalProperties: false
+
+    cadenasaludEmpresaFlagsResponse:
+      type: object
+      properties:
+        resultado:
+          type: boolean
+        mensaje:
+          type: string
+        data:
+          type: object
+          properties:
+            idEmpresas:
+              type: array
+              items:
+                type: number
+      additionalProperties: false     
