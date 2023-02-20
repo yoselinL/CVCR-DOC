@@ -1947,8 +1947,6 @@ components:
                     type: number
                   notificar_dias:
                     type: number
-                  es_recurrente:
-                    type: boolean
                   promocion:
                     type: string
                   tiempoMinutos:
