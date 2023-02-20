@@ -949,8 +949,8 @@ components:
     cadenaRegistroRequest:
       type: object
       required:
-        - nombre
-        - apellido
+        - nombres
+        - apellidos
         - correo
         - fechaNacimiento
         - idEmpresa
@@ -958,9 +958,9 @@ components:
         - confirmarPassword
         - idPais
       properties:
-        nombre:
+        nombres:
           type: string
-        apellido:
+        apellidos:
           type: string
         correo:
           type: string
