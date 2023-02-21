@@ -970,16 +970,14 @@ components:
         data:
           type: object
           properties:
-            id:
-              type: string
-            usuario:
-              type: string
-            correo:
+            idusuario:
               type: string
             isVerified:
               type: boolean
             idPais:
-              type: string              
+              type: string
+            idEmpresa:
+              type: string                           
             jwToken:
               type: string
             refreshToken:
@@ -1153,8 +1151,7 @@ components:
     cadenaDireccionActualizarRequest:
       type: object
       properties:
-        id:
-          type: string
+
         direccion:
           type: string
         alias:
