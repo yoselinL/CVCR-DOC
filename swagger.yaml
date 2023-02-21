@@ -344,23 +344,11 @@ paths:
               schema:
                 $ref: "#/components/schemas/cadenaNitActualizarResponse"
                   
-  /api/orden/list:
-    get:
-      tags:
-        - orden
-      responses:
-        200:
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/cadenaOrdeneslistResponse"
-  
   /api/orden:
     get:
       tags:
         - orden
-      summary: Obtener una Orden por el código de orden
+      summary: Obtener una Orden según los filtros de búsqueda
       parameters:
         - in: query
           name: FechaInicial
@@ -452,14 +440,14 @@ paths:
               schema:
                 $ref: "#/components/schemas/cadenaActivoResponse"
 
-  /api/orden/{id}/calificar:
+  /api/orden/{ordenId}/calificar:
     patch:
       tags:
         - orden
       summary: Calificar una orden
       parameters:
         - in: path
-          name: Id
+          name: OrdenId
           required: true
           schema:
             type: string
@@ -524,11 +512,11 @@ paths:
               schema:
                 $ref: "#/components/schemas/cadenaPerfilactualizarResponse"
 
-  /api/producto/domicilio:
+  /api/producto:
     get:
       tags:
         - producto
-      summary: Búsqueda de productos para envío a domicilio
+      summary: Búsqueda de productos por UN nombre o sku
       parameters:
         - in: query
           name: codigoDireccion
@@ -587,19 +575,7 @@ paths:
         - in: query
           name: idPais
           schema:
-            type: string            
-        - in: query
-          name: tiempoLlegada
-          schema:
-            type: number
-        - in: query
-          name: numeroPagina
-          schema:
-            type: number
-        - in: query
-          name: tamanoPagina
-          schema:
-            type: number
+            type: string
       responses:
         200:
           description: Success
@@ -1370,109 +1346,6 @@ components:
               type: string
       additionalProperties: false
 
-    cadenaOrdeneslistResponse:
-      type: object
-      properties:
-        resultado:
-          type: boolean
-        mensaje:
-          type: string
-        data:
-          type: object
-          properties:
-            id:
-              type: string
-            idPais:
-              type: string
-            ordenPrincipal:
-              type: string
-            codigoOrden:
-              type: string
-            comentarios:
-              type: string
-            moneda:
-              type: string
-            vueltoDe:
-              type: number
-            monto:
-              type: number
-            divisionPedido:
-              type: string
-            realizaTraslado:
-              type: string
-            tipoPago:
-              type: string
-            tipoPedido:
-              type: string
-            tiempoLlegada:
-              type: string  
-            programacionEnvio:
-              type: string  
-            fechaProgramacionInicio:
-              type: string  
-            fechaProgramacionFin:
-              type: string
-            direccion:
-              type: object
-              properties:
-                codigoDireccion:
-                  type: string
-                direccionCompleta:
-                  type: string
-                direccion:
-                  type: string
-                alias:
-                  type: string
-                colonia:
-                  type: string
-                numeroCasa:
-                  type: string
-                indicaciones:
-                  type: string
-                zona:
-                  type: number
-                municipio:
-                  type: number
-                departamento:
-                  type: number
-            ordenEstatusEntregas:
-              type: array
-              items:
-                type: object
-                properties:
-                  created:
-                    type: string
-                    format: date-time
-                  estatusEntrega:
-                    type: object
-                    properties:
-                      codigoEstatus:
-                        type: number
-                      nombre:
-                        type: string
-            ordenProductos:
-              type: array
-              items:
-                type: object
-                properties:
-                  codigoProducto:
-                    type: string
-                  sku:
-                    type: string
-                  nombreProducto:
-                    type: string
-                  monedaPrecioVenta:
-                    type: string
-                  precioVenta:
-                    type: number
-                  cantidad:
-                    type: number
-                  codigoHub:
-                    type: string
-                  anillo:
-                    type: integer
-      additionalProperties: false
-
     cadenaOrdenResponse:
       type: object
       properties:
@@ -1490,42 +1363,45 @@ components:
             totalPaginas:
               type: number
             totalRegistros:
-              type: number
-            codigoPedido:
-              type: string
-            fechaPedido:
-              type: string
-              format: date-time
-            horaPedido:
-              type: string
-            fechaHoraEstimada:
-              type: string
-              format: date-time
-            totalPedido:
-              type: number
-            codigoEstado:
-              type: string
-            nombreEstado:
-              type: string
-            no_pedido:
-              type: string
-            comentarios:
-              type: string
-            productos:
+              type: number              
+            results:
               type: array
               items:
                 type: object
                 properties:
-                  codigoProducto:
+                  codigoPedido:
                     type: string
-                  nombreProducto:
+                  fechaPedido:
                     type: string
-                  monedaPrecioVenta:
+                    format: date-time
+                  horaPedido:
                     type: string
-                  precioVenta:
+                  fechaHoraEstimada:
+                    type: string
+                    format: date-time
+                  totalPedido:
                     type: number
-                  cantidad:
-                    type: number
+                  codigoEstado:
+                    type: string
+                  nombreEstado:
+                    type: string
+                  no_pedido:
+                    type: string
+                  productos:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        codigoProducto:
+                          type: string
+                        nombreProducto:
+                          type: string
+                        monedaPrecioVenta:
+                          type: string
+                        precioVenta:
+                          type: number
+                        cantidad:
+                          type: number
       additionalProperties: false
 
     cadenaTrackingResponse:
@@ -1657,8 +1533,6 @@ components:
     cadenaCalificarRequest:
       type: object
       properties:
-        ordenId:
-          type: string
         calificacion:
           type: number
         comentario:
@@ -1858,18 +1732,10 @@ components:
               type: number
             tamanoPagina:
               type: number
-            primeraPagina:
-              type: string
-            ultimaPagina:
-              type: string
             totalPaginas:
               type: number
             totalRegistros:
               type: number
-            siguientePagina:
-              type: string
-            anteriorPagina:
-              type: string
             productos:
               type: array
               items:
@@ -1881,8 +1747,6 @@ components:
                     type: string
                   nombre:
                     type: string
-                  descripcion:
-                    type: string
                   moneda:
                     type: string
                   precio:
@@ -1891,18 +1755,14 @@ components:
                     type: string                    
                   precioVenta:
                     type: number
-                  disponible:
+                  necesitaReceta:
                     type: boolean
                   anillo:
                     type: number
-                  necesitaReceta:
-                    type: boolean
                   codigoHub:
                     type: string
                   codigoFarmacia:
                     type: string
-                  cantidadInventario:
-                    type: number
                   notificar_dias:
                     type: number
                   promocion:
@@ -1943,8 +1803,6 @@ components:
                     type: string
                   nombre:
                     type: string
-                  descripcion:
-                    type: string
                   moneda:
                     type: string
                   precio:
@@ -1953,8 +1811,6 @@ components:
                     type: string
                   precioVenta:
                     type: number
-                  disponible:
-                    type: boolean
                   anillo:
                     type: number
                   necesitaReceta:
@@ -1963,8 +1819,6 @@ components:
                     type: string
                   codigoFarmacia:
                     type: string
-                  cantidadInventario:
-                    type: number
                   notificar_dias:
                     type: number
                   promocion:
@@ -2028,8 +1882,6 @@ components:
               codigoProducto:
                 type: string
               nombre:
-                type: string
-              descripcion:
                 type: string
       additionalProperties: false
 
