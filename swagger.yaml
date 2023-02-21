@@ -694,23 +694,6 @@ paths:
                 $ref: "#/components/schemas/cadenaTarjetatokenPostResponse"
 
   /api/tarjetastoken/{id}:
-    get:
-      tags:
-        - tarjetas token
-      summary: Recupera una tarjeta en Base a su ID
-      parameters:
-        - in: path
-          name: Id
-          required: true
-          schema:
-            type: string
-      responses:
-        200:
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/cadenaTarjetatokenidGetResponse"
     delete:
       tags:
         - tarjetas token
@@ -728,19 +711,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/cadenaTarjetatokenidDeleteResponse"
-
-  /api/tiempo-entrega:
-    get:
-      tags:
-        - tiempo entrega
-      summary: Obtener listado de tiempo de entrega de pedidos
-      responses:
-        200:
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/cadenaTiempoapoyoResponse"
 
   /api/salud-empresa:
     get:
@@ -1312,8 +1282,6 @@ components:
     cadenaNitActualizarRequest:
       type: object
       properties:
-        codigoNit:
-          type: string
         nit:
           type: string
         razon:
@@ -1982,28 +1950,6 @@ components:
                 type: string
       additionalProperties: false
 
-    cadenaTarjetatokenidGetResponse:
-      type: object
-      properties:
-        resultado:
-          type: boolean
-        mensaje:
-          type: string
-        data:
-          type: object
-          properties:
-            codigoTarjeta:
-              type: string
-            tarjeta:
-              type: string
-            nombre:
-              type: string
-            apellido:
-              type: string
-            tipoTarjeta:
-              type: string
-      additionalProperties: false
-
     cadenaTarjetatokenidDeleteResponse:
       type: object
       properties:
@@ -2022,27 +1968,7 @@ components:
               type: string
             apellido:
               type: string
-            tipoTarjeta:
-              type: string
       additionalProperties: false
-
-    cadenaTiempoapoyoResponse:
-      type: object
-      properties:
-        resultado:
-          type: boolean
-        mensaje:
-          type: string
-        data:
-          type: array
-          items:
-            type: object
-            properties:
-              codigoTiempoEntrega:
-                type: number
-              tiempoEntrega:
-                type: number
-      additionalProperties: false 
 
     cadenasaludEmpresaResponse:
       type: object
