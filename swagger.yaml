@@ -1728,8 +1728,6 @@ components:
                     type: string
                   codigoFarmacia:
                     type: string
-                  notificar_dias:
-                    type: number
                   promocion:
                     type: string
                   tiempoMinutos:
@@ -1784,8 +1782,6 @@ components:
                     type: string
                   codigoFarmacia:
                     type: string
-                  notificar_dias:
-                    type: number
                   promocion:
                     type: string
                   tiempoMinutos:
