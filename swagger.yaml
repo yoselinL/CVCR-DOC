@@ -1216,13 +1216,6 @@ components:
           type: number
         vueltoPedido2:
           type: number
-        fotos:
-          type: array
-          items:
-            type: object
-            properties:
-              receta:
-                type: string
         productos:
           type: array
           items:
