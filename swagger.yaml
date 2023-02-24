@@ -1237,7 +1237,6 @@ components:
                 type: string
               codigoHub:
                 type: string
-              
       additionalProperties: false
 
     cadenaDomicilioResponse:
