@@ -1389,8 +1389,6 @@ components:
                     type: string
                   codigoFarmacia:
                     type: string
-                  promocion:
-                    type: string
                   tiempoMinutos:
                     type: number
       additionalProperties: false
